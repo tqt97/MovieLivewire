@@ -23,7 +23,7 @@ class MovieIndex extends Component
     public $sortColumn = 'title';
     public $sort = 'asc';
     public $sortDirection = 'asc';
-    public $perPage = 10;
+    public $perPage = 10; 
 
     public $movie;
     public $trailerName, $embedHtml;
@@ -36,7 +36,8 @@ class MovieIndex extends Component
         'tagAdded' => 'tagAdded',
         'tagDetached' => 'tagDetached',
         'castAdded' => 'castAdded',
-        'castDetached' => 'castDetached'
+        'castDetached' => 'castDetached',
+        'noCastSelected' => 'noCastSelected',
     ];
     protected $rules = [
         'title' => 'required',
@@ -220,6 +221,11 @@ class MovieIndex extends Component
     public function castDetached()
     {
         $this->dispatchBrowserEvent('banner-message', ['style' => 'success', 'message' => 'Cast detached']);
+        $this->reset();
+    }
+    public function noCastSelected()
+    {
+        $this->dispatchBrowserEvent('banner-message', ['style' => 'danger', 'message' => 'No cast selected']);
         $this->reset();
     }
     public function sortByColumn($column)

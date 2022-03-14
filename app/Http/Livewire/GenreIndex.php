@@ -19,6 +19,8 @@ class GenreIndex extends Component
     public $search = '';
     public $sort = 'asc';
     public $perPage = 10;
+    public $sortColumn = 'title';
+    public $sortDirection = 'asc';
 
     public $genreId;
     public $showGenreModal = false;
@@ -103,13 +105,21 @@ class GenreIndex extends Component
     {
         $this->reset();
     }
-
+    public function sortByColumn($column)
+    {
+        if ($this->sortColumn == $column) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortColumn = $column;
+    }
     public function render()
     {
         return view('livewire.genre-index', [
             'genres' => Genre::when($this->search, function ($query) {
                 return $query->where('title', 'like', '%' . $this->search . '%');
-            })->orderBy('title', $this->sort)->paginate($this->perPage)
+            })->orderBy($this->sortColumn, $this->sortDirection)->paginate($this->perPage)
         ]);
     }
 }

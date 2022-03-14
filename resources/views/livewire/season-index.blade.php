@@ -1,106 +1,53 @@
-<section class="container mx-auto p-6 font-mono">
-    <div class="w-full flex mb-4 justify-start">
-        <form class="flex space-x-4 shadow1 bg-white1 rounded-md">
-            <div class="py-1 flex items-center">
-                <div class="relative rounded-md shadow-sm">
-                    <input wire:model="season_number" class="px-3 py-2 border border-gray-300 rounded"
-                        placeholder="Season number" />
-                </div>
-            </div>
-            <div class="py-1">
-                <button type="button" wire:click="generateSeason"
-                    class="inline-flex items-center justify-center py-2 px-4 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-green-700 transition duration-150 ease-in-out disabled:opacity-50">
-                    <span>Generate</span>
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <x-search></x-search>
-    <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-
-        <div class="w-full overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr
-                        class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-                        <th class="px-4 py-2 text-center">TMDB ID</th>
-                        <th class="px-4 py-2 text-center">Serie ID</th>
-                        <th class="px-4 py-2">Name</th>
-                        <th class="px-4 py-2">Season number</th>
-                        <th class="px-4 py-2">Slug</th>
-                        <th class="px-4 py-2">Poster path</th>
-                        <th class="px-4 py-2 text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @forelse ($seasons as $season)
-                        <tr class="text-gray-700">
-                            <td class="px-4 py-3 border text-center">
-                                {{ $season->tmdb_id }}
-                            </td>
-                            <td class="px-4 py-3 border text-center">
-                                {{ $season->serie_id }}
-                            </td>
-                            <td class="px-4 py-3 border">
-                                {{ $season->name }}
-                            </td>
-                            <td class="px-4 py-3 border">
-                                {{ $season->season_number }}
-                            </td>
-                            <td class="px-4 py-3 border">
-                                {{ $season->slug }}
-                            </td>
-                            <td class="px-4 py-3 border">
-                                <img src="https://image.tmdb.org/t/p/w500/{{ $season->poster_path }}"
-                                    alt="{{ $season->name }}" class="w-12 h-12 rounded">
-                            </td>
-                            <td class="px-4 py-3 border text-center">
-                                <a href="{{ route('admin.episodes.index', [$serie->id, $season->id]) }}"
-                                    title="Episode">
-                                    <x-m-button
-                                        class="bg-blue-600 hover:bg-blue-700 focus:bg-blue-500 active:bg-blue-500 text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                                        </svg>
-                                    </x-m-button>
-
-                                </a>
-                                <x-m-button wire:click="showEditModal({{ $season->id }})"
-                                    class="bg-green-600 hover:bg-green-500 focus:bg-green-500 active:bg-green-500 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </x-m-button>
-                                <x-m-button wire:click="deleteSeason({{ $season->id }})"
-                                    class="bg-red-600 hover:bg-red-500 focus:bg-red-500 active:bg-red-500 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </x-m-button>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <th class="px-4 py-3" colspan="7">No result</th>
-                        </tr>
-                    @endforelse
-                </tbody>
-
-            </table>
-            @if ($seasons->count())
-                <div class="m-2 p-2">
-                    {{ $seasons->links() }}
-                </div>
-            @endif
-        </div>
-    </div>
+<section class="container mx-auto">
+    <x-backend.generate>
+        <x-slot name="input">
+            <input wire:model="season_number" class="px-3 py-2 border border-gray-300 rounded"
+                placeholder="Season number" />
+        </x-slot>
+        <x-backend.button.generate wire:click="generateSeason">
+            <x-backend.icon.spin wire:loading wire:target="generateSeason" />
+        </x-backend.button.generate>
+    </x-backend.generate>
+    <x-search />
+    <x-backend.table.table>
+        <x-slot name="thead">
+            <x-backend.table.th-sort wire:click="sortByColumn('name')">
+                <span> Name </span>
+                @if (!$sortColumn || ($sortColumn == 'name' && $sortDirection == 'asc'))
+                    <x-backend.icon.sort-asc />
+                @else
+                    <x-backend.icon.sort-desc />
+                @endif
+            </x-backend.table.th-sort>
+            <x-backend.table.th-center>Poster</x-backend.table.th-center>
+            <x-backend.table.th-center>Action</x-backend.table.th-center>
+        </x-slot>
+        <x-slot name="tbody">
+            @forelse ($seasons as $tbl_season)
+                <x-backend.table.tbody-tr>
+                    <x-backend.table.td-left>
+                        {{ $tbl_season->name }}
+                    </x-backend.table.td-left>
+                    <x-backend.table.td-center class="flex justify-center items-center py-1">
+                        <img src="https://image.tmdb.org/t/p/w500/{{ $tbl_season->poster_path }}"
+                            alt="{{ $tbl_season->name }}" class="w-12 h-12 rounded">
+                    </x-backend.table.td-center>
+                    <x-backend.table.td-center>
+                        <a href="{{ route('admin.episodes.index', [$serie->id, $tbl_season->id]) }}">
+                            <x-backend.button.option />
+                        </a>
+                        <x-backend.button.edit wire:click="showEditModal({{ $tbl_season->id }})" />
+                        <x-backend.button.delete wire:click="deleteSeason({{ $tbl_season->id }})" />
+                    </x-backend.table.td-center>
+                </x-backend.table.tbody-tr>
+            @empty
+                <x-backend.no-result :colspan="6" />
+            @endforelse
+        </x-slot>
+        <x-slot name="pagination">
+            <x-backend.pagination :pagination="$seasons" />
+        </x-slot>
+    </x-backend.table.table>
     <x-jet-dialog-modal wire:model="showSeasonModal">
         <x-slot name="title">Update Season</x-slot>
         <x-slot name="content">

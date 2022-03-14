@@ -30,6 +30,8 @@ class EpisodeIndex extends Component
     public $search = '';
     public $sort = 'asc';
     public $perPage = 10;
+    public $sortColumn = 'name';
+    public $sortDirection = 'asc';
 
     protected $rules = [
         'name' => 'required',
@@ -170,12 +172,21 @@ class EpisodeIndex extends Component
         $this->showSeasonModal = false;
         $this->reset(['episode_number', 'name', 'overview', 'episode_id', 'showEpisodeModal', 'is_public']);
     }
+    public function sortByColumn($column)
+    {
+        if ($this->sortColumn == $column) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortColumn = $column;
+    }
     public function render()
     {
         return view('livewire.episode-index', [
             'episodes' => Episode::when($this->search, function ($query) {
                 return $query->where('name', 'like', '%' . $this->search . '%');
-            })->orderBy('name', $this->sort)->paginate($this->perPage)
+            })->orderBy($this->sortColumn, $this->sortDirection)->paginate($this->perPage)
         ]);
     }
 }

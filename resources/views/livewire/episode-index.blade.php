@@ -1,104 +1,55 @@
-<section class="container mx-auto p-6 font-mono">
-    <div class="w-full flex mb-4 justify-start">
-        <form class="flex space-x-4 shadow1 bg-white1 rounded-md">
-            <div class="py-1 flex items-center">
-                <div class="relative rounded-md shadow-sm">
-                    <input wire:model="episode_number" class="px-3 py-2 border border-gray-300 rounded"
-                        placeholder="Episode number" />
-                </div>
-            </div>
-            <div class="py-1">
-                <button type="button" wire:click="generateEpisode"
-                    class="inline-flex items-center justify-center py-2 px-4 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-green-700 transition duration-150 ease-in-out disabled:opacity-50">
-                    <span>Generate</span>
-                </button>
-            </div>
-        </form>
-    </div>
+<section class="container mx-auto">
+    <x-backend.generate>
+        <x-slot name="input">
+            <input wire:model="episode_number" class="px-3 py-2 border border-gray-300 rounded"
+                placeholder="Episode number" />
+        </x-slot>
+        <x-backend.button.generate wire:click="generateEpisode">
+            <x-backend.icon.spin wire:loading wire:target="generateEpisode" />
+        </x-backend.button.generate>
+    </x-backend.generate>
 
-    <x-search></x-search>
-    <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
-        <div class="w-full overflow-x-auto1">
-            <table class="w-full">
-                <thead>
-                    <tr
-                        class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100 uppercase border-b border-gray-600">
-
-                        <th class="px-4 py-2">Name</th>
-                        <th class="px-4 py-2">Episode number</th>
-                        <th class="px-4 py-2">Slug</th>
-                        <th class="px-4 py-2">Public</th>
-                        <th class="px-4 py-2 text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    @forelse ($episodes as $tb_episode)
-                        <tr class="text-gray-700">
-
-                            <td class="px-4 py-3 border">
-                                {{ $tb_episode->name }}
-                            </td>
-                            <td class="px-4 py-3 border">
-                                {{ $tb_episode->tb_episode_number }}
-                            </td>
-                            <td class="px-4 py-3 border">
-                                {{ $tb_episode->slug }}
-                            </td>
-                            <td class="px-4 py-3 border">
-                                @if ($tb_episode->is_public)
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Published
-                                    </span>
-                                @else
-                                    <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                        UnPublished
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-3 border text-center">
-                                <x-m-button wire:click="showTrailerModal({{ $tb_episode->id }})"
-                                    class="bg-indigo-600 hover:bg-indigo-700  focus:bg-indigo-700 active:bg-indigo-700 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                    </svg>
-                                </x-m-button>
-                                <x-m-button wire:click="showEditModal({{ $tb_episode->id }})"
-                                    class="bg-green-600 hover:bg-green-500 focus:bg-green-500 active:bg-green-500 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </x-m-button>
-                                <x-m-button wire:click="deleteEpisode({{ $tb_episode->id }})"
-                                    class="bg-red-600 hover:bg-red-500 focus:bg-red-500 active:bg-red-500 text-white">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </x-m-button>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <th class="px-4 py-3" colspan="7">No result</th>
-                        </tr>
-                    @endforelse
-                </tbody>
-
-            </table>
-            @if ($episodes->count())
-                <div class="m-2 p-2">
-                    {{ $episodes->links() }}
-                </div>
-            @endif
-        </div>
-    </div>
+    <x-search />
+    <x-backend.table.table>
+        <x-slot name="thead">
+            <x-backend.table.th-sort wire:click="sortByColumn('name')">
+                <span> Name </span>
+                @if (!$sortColumn || ($sortColumn == 'name' && $sortDirection == 'asc'))
+                    <x-backend.icon.sort-asc />
+                @else
+                    <x-backend.icon.sort-desc />
+                @endif
+            </x-backend.table.th-sort>
+            <x-backend.table.th-center>Public</x-backend.table.th-center>
+            <x-backend.table.th-center>Action</x-backend.table.th-center>
+        </x-slot>
+        <x-slot name="tbody">
+            @forelse ($episodes as $tbl_episode)
+                <x-backend.table.tbody-tr>
+                    <x-backend.table.td-left>
+                        {{ $tbl_episode->name }}
+                    </x-backend.table.td-left>
+                    <x-backend.table.td-center>
+                        @if ($tbl_episode->is_public)
+                            <x-backend.publish />
+                        @else
+                            <x-backend.unpublish />
+                        @endif
+                    </x-backend.table.td-center>
+                    <x-backend.table.td-center>
+                        <x-backend.button.trailer wire:click="showTrailerModal({{ $tbl_episode->id }})" />
+                        <x-backend.button.edit wire:click="showEditModal({{ $tbl_episode->id }})" />
+                        <x-backend.button.delete wire:click="deleteEpisode({{ $tbl_episode->id }})" />
+                    </x-backend.table.td-center>
+                </x-backend.table.tbody-tr>
+            @empty
+                <x-backend.no-result :colspan="6" />
+            @endforelse
+        </x-slot>
+        <x-slot name="pagination">
+            <x-backend.pagination :pagination="$episodes" />
+        </x-slot>
+    </x-backend.table.table>
     <x-jet-dialog-modal wire:model="showEpisodeModal">
         <x-slot name="title">Update Episode</x-slot>
         <x-slot name="content">
@@ -132,8 +83,7 @@
                                         <label class="block text-sm font-medium text-gray-700">
                                             Overview
                                         </label>
-                                        <textarea wire:model="overview"
-                                            class="mt-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                        <textarea wire:model="overview" class="mt-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                             cols="30" rows="2">{{ $overview }}</textarea>
                                         @error('overview')
                                             <span class="text-red-500 text-sm">{{ $message }}</span>

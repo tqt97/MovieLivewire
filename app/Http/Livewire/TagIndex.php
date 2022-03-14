@@ -15,6 +15,8 @@ class TagIndex extends Component
     public $search = '';
     public $sort = 'asc';
     public $perPage = 10;
+    public $sortColumn = 'tag_name';
+    public $sortDirection = 'asc';
 
 
     public function showCreateModal()
@@ -79,13 +81,21 @@ class TagIndex extends Component
     {
         $this->reset();
     }
-
+    public function sortByColumn($column)
+    {
+        if ($this->sortColumn == $column) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortColumn = $column;
+    }
     public function render()
     {
         return view('livewire.tag-index', [
             'tags' => Tag::when($this->search, function ($query) {
                 return $query->where('tag_name', 'like', '%' . $this->search . '%');
-            })->orderBy('tag_name', $this->sort)->paginate($this->perPage)
+            })->orderBy($this->sortColumn, $this->sortDirection)->paginate($this->perPage)
         ]);
     }
 }

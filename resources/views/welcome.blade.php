@@ -10,7 +10,7 @@
                         <x-slot name="image">
                             <a href="{{ route('movies.show', $movie->slug) }}">
                                 <div class="aspect-w-2 aspect-h-3">
-                                    <img src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_path }}" alt=""
+                                    <img src="https://image.tmdb.org/t/p/w500/{{ $movie->poster_path }}" alt="{{ $movie->title }}"
                                         class="object-cover">
                                         <x-label-new/>
                                 </div>

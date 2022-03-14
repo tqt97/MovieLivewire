@@ -7,7 +7,6 @@ use App\Models\Cast;
 use App\Models\Movie;
 use App\Models\Serie;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {

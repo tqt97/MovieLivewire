@@ -10,10 +10,21 @@ class MovieCast extends Component
     public $queryCast = '';
     public $movie;
     public $casts = [];
+    public $selectCast = [];
 
     public function mount($movie)
     {
         $this->movie = $movie;
+    }
+    public function asyncCasts()
+    {
+        if (count($this->selectCast)) {
+            $this->movie->casts()->syncWithoutDetaching($this->selectCast);
+            $this->reset('queryCast');
+            $this->emit('castAdded');
+        }else{
+            $this->emit('noCastSelected');
+        }
     }
     public function updatedQueryCast()
     {

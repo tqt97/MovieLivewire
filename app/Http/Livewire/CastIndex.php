@@ -21,6 +21,8 @@ class CastIndex extends Component
     public $search = '';
     public $sort = 'asc';
     public $perPage = 10;
+    public $sortColumn = 'name';
+    public $sortDirection = 'asc';
 
     public $castId;
     public $showCastModal = false;
@@ -121,16 +123,21 @@ class CastIndex extends Component
     {
         $this->reset();
     }
-
+    public function sortByColumn($column)
+    {
+        if ($this->sortColumn == $column) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortColumn = $column;
+    }
     public function render()
     {
-        // return view('livewire.cast-index', [
-        //     'casts' => Cast::search('name', $this->search)->orderBy('name', $this->sort)->paginate($this->perPage),
-        // ]);
         return view('livewire.cast-index', [
             'casts' => Cast::when($this->search, function ($query) {
                 return $query->where('name', 'like', '%' . $this->search . '%');
-            })->orderBy('name', $this->sort)->paginate($this->perPage)
+            })->orderBy($this->sortColumn, $this->sortDirection)->paginate($this->perPage)
         ]);
     }
 }

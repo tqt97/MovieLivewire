@@ -21,7 +21,9 @@ class SeasonIndex extends Component
     protected $key = 'f7c944d484153416dadeaf04b9065872';
 
     public $search = '';
+    public $sortColumn = 'name';
     public $sort = 'asc';
+    public $sortDirection = 'asc';
     public $perPage = 10;
 
     protected $rules = [
@@ -146,12 +148,21 @@ class SeasonIndex extends Component
     {
         $this->showSeasonModal = false;
     }
+    public function sortByColumn($column)
+    {
+        if ($this->sortColumn == $column) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortDirection = 'asc';
+        }
+        $this->sortColumn = $column;
+    }
     public function render()
     {
         return view('livewire.season-index', [
             'seasons' => Season::when($this->search, function ($query) {
                 return $query->where('name', 'like', '%' . $this->search . '%');
-            })->orderBy('name', $this->sort)->paginate($this->perPage)
+            })->orderBy($this->sortColumn, $this->sortDirection)->paginate($this->perPage)
         ]);
     }
 }

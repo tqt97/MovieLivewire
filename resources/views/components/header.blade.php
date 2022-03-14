@@ -22,6 +22,14 @@
     </div>
 
     <div class="flex items-center">
+        <a href="{{ route('welcome') }}" target="_blank" class="relative block overflow-hidden rounded-full shadow focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+            </svg>
+        </a>
+
         <div x-data="{ notificationOpen: false }" class="relative">
             <button @click="notificationOpen = ! notificationOpen" class="flex mx-4 text-gray-600 focus:outline-none">
                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -30,7 +38,6 @@
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
-
             <div x-cloak x-show="notificationOpen" @click="notificationOpen = false"
                 class="fixed inset-0 z-10 w-full h-full"></div>
 
@@ -77,7 +84,6 @@
                 </a>
             </div>
         </div>
-
         <div x-data="{ dropdownOpen: false }" class="relative">
 
             <button @click="dropdownOpen = ! dropdownOpen"
